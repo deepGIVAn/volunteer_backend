@@ -1,0 +1,11 @@
+Django
+requests
+python-decouple
+mysqlclient
+pillow
+openpyxl
+pandas
+gunicorn
+msal
+# pymysql
+httpx
