@@ -37,7 +37,6 @@ def admin_login(request):
 		return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 @admin_token_required
 def get_admin_info(request):
 	admin = request.admin
@@ -50,3 +49,11 @@ def get_admin_info(request):
 		'permissions': permissions,
 		'status': admin.status,
 	})
+
+@api_view(['POST'])
+@admin_token_required
+def admin_logout(request):
+	admin = request.admin
+	token_key = request.headers.get('Authorization', '').replace('Bearer ', '')
+	AdminToken.objects.filter(admin=admin, key=token_key).delete()
+	return Response({'success': True, 'message': 'Logged out successfully.'})
