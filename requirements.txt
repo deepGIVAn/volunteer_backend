@@ -1,7 +1,7 @@
 Django
 requests
 python-decouple
-mysqlclient
+# mysqlclient
 pillow
 openpyxl
 pandas
@@ -9,3 +9,6 @@ gunicorn
 msal
 # pymysql
 httpx
+djangorestframework
+django-cors-headers
+mysqlclient==2.2.7
