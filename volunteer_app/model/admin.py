@@ -12,6 +12,7 @@ class Admin(models.Model):
 	role = models.IntegerField(choices=ADMIN_ROLE, default=2)
 	created_at = models.DateTimeField(auto_now_add=True)
 
+	@property
 	def get_status_display(self):
 		return "Active" if self.status else "Inactive"
 
@@ -23,9 +24,11 @@ class AdminPermissions(models.Model):
 	permission = models.IntegerField(choices=ADMIN_PERMISSIONS, default=0)
 	permission_status = models.BooleanField(default=False)
 
+	@property
 	def permission_name(self):
 		return dict(ADMIN_PERMISSIONS).get(self.permission, "Unknown")
 
+	@property
 	def get_permission_status_display(self):
 		return "Active" if self.permission_status else "Inactive"
 
