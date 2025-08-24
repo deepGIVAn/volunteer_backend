@@ -28,7 +28,7 @@ class Organisations(models.Model):
 	organisation_type_list = models.JSONField(default=list, null=True, blank=True)
 
 	status = models.IntegerField(choices=ORGANISATION_STATUS, default=4)
-	attachments = models.CharField(max_length=200, null=True, blank=True)
+	attachment = models.CharField(max_length=200, null=True, blank=True)
 
 	added_date = models.DateTimeField(null=True, blank=True)
 	deactivated_date = models.DateTimeField(null=True, blank=True)

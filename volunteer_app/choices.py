@@ -11,7 +11,7 @@ ORGANISATION_STATUS = (
 	(1, "Active"),
 	(2, "Inactive"),
 	(3, "Awaiting Approval"),
-	(4, "Blank"),
+	(4, "Draft"), # Draft
 )
 
 VOLUNTEER_STATUS = (
