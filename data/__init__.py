@@ -6,7 +6,7 @@ base_dir = Path(__file__).resolve().parent.parent
 
 def get_regions_list():
 	try:
-		csv_path = os.path.join(base_dir, 'utils', 'regions.csv')
+		csv_path = os.path.join(base_dir, 'data', 'regions.csv')
 		regions_list = []
 		with open(csv_path, 'r') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
@@ -23,7 +23,7 @@ def get_regions_list():
 
 def get_regions_list_full():
 	try:
-		csv_path = os.path.join(base_dir, 'utils', 'regions.csv')
+		csv_path = os.path.join(base_dir, 'data', 'regions.csv')
 		regions_list = []
 		with open(csv_path, 'r') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
@@ -38,7 +38,7 @@ def get_regions_list_full():
 
 def get_services_list():
 	try:
-		csv_path = os.path.join(base_dir, 'utils', 'services.csv')
+		csv_path = os.path.join(base_dir, 'data', 'services.csv')
 		services_list = []
 		with open(csv_path, 'r') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
@@ -53,7 +53,7 @@ def get_services_list():
 
 def get_type_of_work_list():
 	try:
-		csv_path = os.path.join(base_dir, 'utils', 'typeofwork.csv')
+		csv_path = os.path.join(base_dir, 'data', 'typeofwork.csv')
 		services_list = []
 		with open(csv_path, 'r') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
@@ -68,7 +68,7 @@ def get_type_of_work_list():
 
 def get_activities_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities.csv')
         activities_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -83,7 +83,7 @@ def get_activities_list():
 
 def get_activities_driving_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_driving.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_driving.csv')
         driving_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -98,7 +98,7 @@ def get_activities_driving_list():
 
 def get_activities_administration_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_administration.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_administration.csv')
         admin_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -113,7 +113,7 @@ def get_activities_administration_list():
 
 def get_activities_mantinance_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_mantinance.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_mantinance.csv')
         mantinance_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -128,7 +128,7 @@ def get_activities_mantinance_list():
 
 def get_activities_home_cares_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_home_cares.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_home_cares.csv')
         home_cares_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -143,7 +143,7 @@ def get_activities_home_cares_list():
 
 def get_activities_technology_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_technology.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_technology.csv')
         technology_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -158,7 +158,7 @@ def get_activities_technology_list():
 
 def get_activities_event_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_event.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_event.csv')
         event_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -173,7 +173,7 @@ def get_activities_event_list():
 
 def get_activities_hospitality_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_hospitality.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_hospitality.csv')
         hospitality_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -188,7 +188,7 @@ def get_activities_hospitality_list():
 
 def get_activities_support_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_support.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_support.csv')
         support_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -203,7 +203,7 @@ def get_activities_support_list():
 
 def get_activities_financial_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_financial.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_financial.csv')
         financial_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -218,7 +218,7 @@ def get_activities_financial_list():
 
 def get_activities_other_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_other.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_other.csv')
         other_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -233,7 +233,7 @@ def get_activities_other_list():
 
 def get_activities_sport_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_sport.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_sport.csv')
         sport_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -248,7 +248,7 @@ def get_activities_sport_list():
 
 def get_activities_group_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'activities_group.csv')
+        csv_path = os.path.join(base_dir, 'data', 'activities_group.csv')
         group_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -263,7 +263,7 @@ def get_activities_group_list():
 
 def get_transport_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'transport.csv')
+        csv_path = os.path.join(base_dir, 'data', 'transport.csv')
         transport_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -278,7 +278,7 @@ def get_transport_list():
 
 def get_time_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'time.csv')
+        csv_path = os.path.join(base_dir, 'data', 'time.csv')
         time_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -293,7 +293,7 @@ def get_time_list():
 
 def get_refer_from_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'refer_from.csv')
+        csv_path = os.path.join(base_dir, 'data', 'refer_from.csv')
         refer_from_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -308,7 +308,7 @@ def get_refer_from_list():
 
 def get_labour_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'labour.csv')
+        csv_path = os.path.join(base_dir, 'data', 'labour.csv')
         labour_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -323,7 +323,7 @@ def get_labour_list():
 
 def get_ethnic_origin_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'ethnic_origin.csv')
+        csv_path = os.path.join(base_dir, 'data', 'ethnic_origin.csv')
         ethnic_origin_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
@@ -338,7 +338,7 @@ def get_ethnic_origin_list():
 
 def get_days_list():
     try:
-        csv_path = os.path.join(base_dir, 'utils', 'days.csv')
+        csv_path = os.path.join(base_dir, 'data', 'days.csv')
         days_list = []
         with open(csv_path, 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)

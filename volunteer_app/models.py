@@ -1,1 +1,1 @@
-from volunteer_app.model.admin import *
+from volunteer_app.model import *

@@ -10,6 +10,7 @@ class Admin(models.Model):
 	password = models.CharField(max_length=100)
 	status = models.BooleanField(default=False)
 	role = models.IntegerField(choices=ADMIN_ROLE, default=2)
+	deleted_at = models.DateTimeField(null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	@property
@@ -34,3 +35,15 @@ class AdminPermissions(models.Model):
 
 	def __str__(self):
 		return self.admin.name
+
+class Comments(models.Model):
+	id = models.CharField(max_length=36, default=uuid.uuid4, unique=True, primary_key=True)
+	admin = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True, blank=True)
+	comment_belongs_to = models.CharField(max_length=36)
+	comment = models.TextField(null=True, blank=True)
+	deleted_at = models.DateTimeField(null=True, blank=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.comment
