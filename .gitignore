@@ -8,7 +8,7 @@ __pycache__/
 **/migrations/
 # C extensions
 *.so
-
+dev.*
 # Distribution / packaging
 .Python
 build/
