@@ -4,7 +4,7 @@ from volunteer_app.model import Organisations
 from django.conf import settings
 
 class OrganisationSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
+    # status = serializers.SerializerMethodField()
     organisation_type_list = serializers.SerializerMethodField()
     attachment = serializers.SerializerMethodField()
 
@@ -12,8 +12,8 @@ class OrganisationSerializer(serializers.ModelSerializer):
         model = Organisations
         fields = '__all__'
 
-    def get_status(self, obj):
-        return obj.status_display
+    # def get_status(self, obj):
+    #     return obj.status_display
 
     def get_organisation_type_list(self, obj):
         return obj.organisation_types
