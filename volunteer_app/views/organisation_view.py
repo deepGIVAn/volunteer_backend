@@ -4,6 +4,10 @@ from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from volunteer_app.serializers import OrganisationSerializer
+import os
+import re
+from datetime import datetime
+from django.conf import settings
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
@@ -25,6 +29,38 @@ def create_organisation(request):
 					return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
 				except Exception:
 					return None
+
+		# Handle file upload with timestamp and URL-friendly filename
+		def handle_file_upload(uploaded_file):
+			if not uploaded_file:
+				return None
+			
+			# Create media/organisations directory if it doesn't exist
+			upload_dir = os.path.join(settings.MEDIA_ROOT, 'organisations')
+			os.makedirs(upload_dir, exist_ok=True)
+			
+			# Get file extension
+			name, ext = os.path.splitext(uploaded_file.name)
+			
+			# Create URL-friendly filename with timestamp
+			timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+			safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
+			new_filename = f"{safe_name}_{timestamp}{ext}"
+			
+			# Full file path
+			file_path = os.path.join(upload_dir, new_filename)
+			
+			# Save the file
+			with open(file_path, 'wb+') as destination:
+				for chunk in uploaded_file.chunks():
+					destination.write(chunk)
+			
+			# Return relative path for storing in CharField
+			return f"organisations/{new_filename}"
+
+		# Process file upload
+		attachment_file = request.FILES.get("attachment")
+		attachment_path = handle_file_upload(attachment_file) if attachment_file else None
 
 		data = {
 			"title": request.data.get("title", None),
@@ -51,7 +87,7 @@ def create_organisation(request):
 			"status": request.data.get("status", None),
 			"added_date": parse_datetime(request.data.get("date_added", None)),
 			"deactivated_date": parse_datetime(request.data.get("date_deactivated", None)),
-			"attachment": request.FILES.get("attachment", None)
+			"attachment": attachment_path
 		}
 
 		# Convert string booleans to Python booleans for BooleanFields
