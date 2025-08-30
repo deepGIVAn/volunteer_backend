@@ -42,6 +42,7 @@ def get_admin_info(request):
 	admin = request.admin
 	permissions = list(AdminPermissions.objects.filter(admin=admin, permission_status=True).values_list('permission', flat=True))
 	return Response({
+		'success': True,
 		'admin_id': admin.id,
 		'name': admin.name,
 		'email': admin.email,

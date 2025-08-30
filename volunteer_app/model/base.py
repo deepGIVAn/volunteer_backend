@@ -3,6 +3,18 @@ from volunteer_app.choices import *
 import uuid
 import csv
 
+
+class ActiveManager(models.Manager):
+    """Manager that filters out deleted objects by default"""
+    def get_queryset(self):
+        return super().get_queryset().filter(isdeleted=False)
+
+
+class AllObjectsManager(models.Manager):
+    """Manager that returns all objects including deleted ones"""
+    def get_queryset(self):
+        return super().get_queryset()
+
 class Organisations(models.Model):
 	id = models.CharField(max_length=36, default=uuid.uuid4, unique=True, primary_key=True)
 	title = models.CharField(max_length=200, null=True, blank=True)
@@ -33,9 +45,14 @@ class Organisations(models.Model):
 	added_date = models.DateTimeField(null=True, blank=True)
 	deactivated_date = models.DateTimeField(null=True, blank=True)
 	
+	isdeleted = models.BooleanField(default=False)
 	deleted_at = models.DateTimeField(null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
+
+	# Custom managers
+	objects = ActiveManager()  # Default manager excludes deleted objects
+	all_objects = AllObjectsManager()  # Manager that includes all objects
 
 	def __str__(self):
 		return self.organisation_name
@@ -111,9 +128,14 @@ class Volunteer(models.Model):
 	activities_sport_list = models.JSONField(default=list, null=True, blank=True)
 	activities_group_list = models.JSONField(default=list, null=True, blank=True)
 
+	isdeleted = models.BooleanField(default=False)
 	deleted_at = models.DateTimeField(null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
+
+	# Custom managers
+	objects = ActiveManager()  # Default manager excludes deleted objects
+	all_objects = AllObjectsManager()  # Manager that includes all objects
 
 	def __str__(self):
 		return f"{self.first_name} {self.last_name}"
@@ -174,6 +196,11 @@ class Role(models.Model):
 	attachments = models.CharField(max_length=200, null=True, blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
+	isdeleted = models.BooleanField(default=False)
+
+	# Custom managers
+	objects = ActiveManager()  # Default manager excludes deleted objects
+	all_objects = AllObjectsManager()  # Manager that includes all objects
 
 	def __str__(self):
 		return self.title
