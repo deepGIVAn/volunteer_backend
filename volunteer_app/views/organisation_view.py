@@ -13,14 +13,18 @@ def parse_datetime(val):
 	if not val or not isinstance(val, str) or not val.strip():
 		return None
 	try:
-		# Try parsing with timezone first
+		# Try parsing with timezone or full ISO
 		return datetime.fromisoformat(val)
 	except Exception:
 		try:
-			# Try parsing without timezone
+			# Try parsing without timezone (with seconds)
 			return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
 		except Exception:
-			return None
+			try:
+				# Try parsing ISO without seconds (e.g. 2025-08-27T14:01)
+				return datetime.strptime(val, "%Y-%m-%dT%H:%M")
+			except Exception:
+				return None
 
 # Handle file upload with timestamp and URL-friendly filename
 def handle_file_upload(uploaded_file, path):
@@ -161,19 +165,6 @@ def update_organisation(request, id):
 	try:
 		# Use request.data for all fields, works for both multipart and json
 		org_id = id
-		from datetime import datetime
-		def parse_datetime(val):
-			if not val or not isinstance(val, str) or not val.strip():
-				return None
-			try:
-				# Try parsing with timezone first
-				return datetime.fromisoformat(val)
-			except Exception:
-				try:
-					# Try parsing without timezone
-					return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
-				except Exception:
-					return None
 
 		# Handle file upload with timestamp and URL-friendly filename
 		def handle_file_upload(uploaded_file):
@@ -234,15 +225,6 @@ def update_organisation(request, id):
 			"deactivated_date": parse_datetime(request.data.get("date_deactivated", None)),
 			"attachment": attachment_path
 		}
-
-		# Convert string booleans to Python booleans for BooleanFields
-		def parse_bool(val):
-			if isinstance(val, bool) or val is None:
-				return val
-			if isinstance(val, str):
-				if val.lower() in ("true", "1", "yes"): return True
-				if val.lower() in ("false", "0", "no"): return False
-			return None
 
 		for bool_field in ["disability", "policies", "risk"]:
 			data[bool_field] = parse_bool(data.get(bool_field))
