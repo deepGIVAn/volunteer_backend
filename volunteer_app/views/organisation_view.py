@@ -259,5 +259,5 @@ def update_organisation(request, id):
 			except Organisations.DoesNotExist:
 				return Response({"error": "Organisation not found"}, status=404)
 	except Exception as e:
-		print(e)
+		# print(e)
 		return Response({"error": str(e)}, status=400)

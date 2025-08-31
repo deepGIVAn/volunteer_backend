@@ -1,6 +1,5 @@
-
 from rest_framework import serializers
-from volunteer_app.model import Organisations, Role
+from volunteer_app.model import Organisations, Role, Volunteer
 from django.conf import settings
 
 class OrganisationSerializer(serializers.ModelSerializer):
@@ -47,3 +46,14 @@ class RoleSerializer(serializers.ModelSerializer):
 		if obj.attachments:
 			return f"{settings.BACKEND_URL}{settings.MEDIA_URL}{obj.attachments}"
 		return None
+
+class VolunteerSerializer(serializers.ModelSerializer):
+	years_of_birth = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Volunteer
+		fields = '__all__'
+
+	def get_years_of_birth(self, obj):
+		if obj.year_of_birth:
+			return int(obj.year_of_birth)

@@ -97,12 +97,24 @@ def get_all_roles(request):
 @api_view(['GET'])
 @admin_token_required
 def get_role(request, id):
-	pass
+	try:
+		role = Role.objects.get(id=id)
+		serializer = RoleSerializer(role)
+		return Response(serializer.data, status=200)
+	except Role.DoesNotExist:
+		return Response({"error": "Role not found"}, status=404)
 
 @api_view(['DELETE'])
 @admin_token_required
 def delete_role(request, id):
-	pass
+	try:
+		role = Role.objects.get(id=id)
+		role.deleted_at = datetime.now()
+		role.isdeleted = True
+		role.save()
+		return Response({"message": "Role deleted"}, status=200)
+	except Role.DoesNotExist:
+		return Response({"error": "Role not found"}, status=404)
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])

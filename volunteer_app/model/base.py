@@ -201,6 +201,7 @@ class Role(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	isdeleted = models.BooleanField(default=False)
+	deleted_at = models.DateTimeField(null=True, blank=True)
 
 	# Custom managers
 	objects = ActiveManager()  # Default manager excludes deleted objects
