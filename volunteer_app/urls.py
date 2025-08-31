@@ -21,4 +21,10 @@ urlpatterns = [
 	path('admin/get-role/<str:id>/', role_view.get_role, name="get_role"),
 	path('admin/delete-role/<str:id>/', role_view.delete_role, name="delete_role"),
 	path('admin/update-role/<str:id>/', role_view.update_role, name="update_role"),
+
+	path('admin/create-volunteer/', volunteer_view.create_volunteer, name="create_volunteer"),
+	path('admin/get-all-volunteers/', volunteer_view.get_all_volunteers, name="get_all_volunteers"),
+	path('admin/get-volunteer/<str:id>/', volunteer_view.get_volunteer, name="get_volunteer"),
+	path('admin/delete-volunteer/<str:id>/', volunteer_view.delete_volunteer, name="delete_volunteer"),
+	path('admin/update-volunteer/<str:id>/', volunteer_view.update_volunteer, name="update_volunteer"),
 ]

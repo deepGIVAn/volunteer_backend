@@ -53,7 +53,7 @@ def get_services_list():
 
 def get_type_of_work_list():
 	try:
-		csv_path = os.path.join(base_dir, 'data', 'typeofwork.csv')
+		csv_path = os.path.join(base_dir, 'data', 'type_of_work.csv')
 		services_list = []
 		with open(csv_path, 'r') as csv_file:
 			csv_reader = csv.DictReader(csv_file)
@@ -300,7 +300,7 @@ def get_refer_from_list():
             for row in csv_reader:
                 refer_from_list.append({
                     'seq': int(row['seq']),
-                    'refer_from': row['refer_from']
+                    'refer_from': row['refer_from_type']
                 })
         return refer_from_list
     except Exception as e:

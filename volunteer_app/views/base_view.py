@@ -36,5 +36,17 @@ def get_preset(request, type):
 		return Response(get_activities_sport_list(), status=200)
 	elif type == "activities_group_list":
 		return Response(get_activities_group_list(), status=200)
+	elif type == "type_of_work_list":
+		return Response(get_type_of_work_list(), status=200)
+	elif type == "refer_from_list":
+		return Response(get_refer_from_list(), status=200)
+	elif type == "labour_list":
+		return Response(get_labour_list(), status=200)
+	elif type == "transport_list":
+		return Response(get_transport_list(), status=200)
+	elif type == "ethnic_origin_list":
+		return Response(get_ethnic_origin_list(), status=200)
+	elif type == "activities_list":
+		return Response(get_activities_list(), status=200)
 	else:
 		return Response([], status=400)

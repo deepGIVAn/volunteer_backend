@@ -15,8 +15,8 @@ ORGANISATION_STATUS = (
 )
 
 VOLUNTEER_STATUS = (
-	(1, "Deactivated"),
-	(2, "Active"),
+	(1, "Active"),
+	(2, "DeActivated"),
 	(3, "Review"),
 )
 

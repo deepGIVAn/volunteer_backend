@@ -120,7 +120,7 @@ class Volunteer(models.Model):
 
 	activities_administration_list = models.JSONField(default=list, null=True, blank=True)
 	activities_mantinance_list = models.JSONField(default=list, null=True, blank=True)
-	activities_homecares_list = models.JSONField(default=list, null=True, blank=True)
+	activities_home_cares_list = models.JSONField(default=list, null=True, blank=True)
 	activities_technology_list = models.JSONField(default=list, null=True, blank=True)
 	activities_event_list = models.JSONField(default=list, null=True, blank=True)
 	activities_hospitality_list = models.JSONField(default=list, null=True, blank=True)
