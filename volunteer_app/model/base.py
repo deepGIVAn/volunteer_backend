@@ -2,18 +2,21 @@ from django.db import models
 from volunteer_app.choices import *
 import uuid
 import csv
+import random
 
+def generate_4_digit_number_str():
+	return f"{random.randint(0, 9999):04d}"
 
 class ActiveManager(models.Manager):
-    """Manager that filters out deleted objects by default"""
-    def get_queryset(self):
-        return super().get_queryset().filter(isdeleted=False)
+	"""Manager that filters out deleted objects by default"""
+	def get_queryset(self):
+		return super().get_queryset().filter(isdeleted=False)
 
 
 class AllObjectsManager(models.Manager):
-    """Manager that returns all objects including deleted ones"""
-    def get_queryset(self):
-        return super().get_queryset()
+	"""Manager that returns all objects including deleted ones"""
+	def get_queryset(self):
+		return super().get_queryset()
 
 class Organisations(models.Model):
 	id = models.CharField(max_length=36, default=uuid.uuid4, unique=True, primary_key=True)
@@ -142,6 +145,7 @@ class Volunteer(models.Model):
 
 class Role(models.Model):
 	id = models.CharField(max_length=36, default=uuid.uuid4, unique=True, primary_key=True)
+	roleId = models.CharField(max_length=10, unique=True, null=True, blank=True)
 	title = models.CharField(max_length=200)
 	organisation = models.ForeignKey(Organisations, on_delete=models.CASCADE)
 	contact = models.TextField(null=True, blank=True)
@@ -204,6 +208,18 @@ class Role(models.Model):
 
 	def __str__(self):
 		return self.title
+
+	def save(self, *args, **kwargs):
+		if not self.roleId:
+			# Try up to 10 times to avoid rare collisions
+			for _ in range(10):
+				candidate = generate_4_digit_number_str()
+				if not Role.objects.filter(roleId=candidate).exists():
+					self.roleId = candidate
+					break
+			else:
+				raise ValueError("Could not generate a unique 4-digit roleId after 10 attempts.")
+		super().save(*args, **kwargs)
 
 	@property
 	def status_display(self):

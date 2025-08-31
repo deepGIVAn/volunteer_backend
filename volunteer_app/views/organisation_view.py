@@ -9,6 +9,57 @@ import re
 from datetime import datetime
 from django.conf import settings
 
+def parse_datetime(val):
+	if not val or not isinstance(val, str) or not val.strip():
+		return None
+	try:
+		# Try parsing with timezone first
+		return datetime.fromisoformat(val)
+	except Exception:
+		try:
+			# Try parsing without timezone
+			return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
+		except Exception:
+			return None
+
+# Handle file upload with timestamp and URL-friendly filename
+def handle_file_upload(uploaded_file, path):
+	if not uploaded_file:
+		return None
+	
+	# Create media/organisations directory if it doesn't exist
+	upload_dir = os.path.join(settings.MEDIA_ROOT, path)
+	os.makedirs(upload_dir, exist_ok=True)
+	
+	# Get file extension
+	name, ext = os.path.splitext(uploaded_file.name)
+	
+	# Create URL-friendly filename with timestamp
+	timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+	safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
+	new_filename = f"{safe_name}_{timestamp}{ext}"
+	
+	# Full file path
+	file_path = os.path.join(upload_dir, new_filename)
+	
+	# Save the file
+	with open(file_path, 'wb+') as destination:
+		for chunk in uploaded_file.chunks():
+			destination.write(chunk)
+	
+	# Return relative path for storing in CharField
+	return f"{path}/{new_filename}"
+
+# Convert string booleans to Python booleans for BooleanFields
+def parse_bool(val):
+	if isinstance(val, bool) or val is None:
+		return val
+	if isinstance(val, str):
+		if val.lower() in ("true", "1", "yes"): return True
+		if val.lower() in ("false", "0", "no"): return False
+	return None
+
+
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 @admin_token_required
@@ -16,51 +67,10 @@ def create_organisation(request):
 	try:
 		# Use request.data for all fields, works for both multipart and json
 		org_id = request.data.get("id", None)
-		from datetime import datetime
-		def parse_datetime(val):
-			if not val or not isinstance(val, str) or not val.strip():
-				return None
-			try:
-				# Try parsing with timezone first
-				return datetime.fromisoformat(val)
-			except Exception:
-				try:
-					# Try parsing without timezone
-					return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
-				except Exception:
-					return None
-
-		# Handle file upload with timestamp and URL-friendly filename
-		def handle_file_upload(uploaded_file):
-			if not uploaded_file:
-				return None
-			
-			# Create media/organisations directory if it doesn't exist
-			upload_dir = os.path.join(settings.MEDIA_ROOT, 'organisations')
-			os.makedirs(upload_dir, exist_ok=True)
-			
-			# Get file extension
-			name, ext = os.path.splitext(uploaded_file.name)
-			
-			# Create URL-friendly filename with timestamp
-			timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-			safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
-			new_filename = f"{safe_name}_{timestamp}{ext}"
-			
-			# Full file path
-			file_path = os.path.join(upload_dir, new_filename)
-			
-			# Save the file
-			with open(file_path, 'wb+') as destination:
-				for chunk in uploaded_file.chunks():
-					destination.write(chunk)
-			
-			# Return relative path for storing in CharField
-			return f"organisations/{new_filename}"
-
+		
 		# Process file upload
 		attachment_file = request.FILES.get("attachment")
-		attachment_path = handle_file_upload(attachment_file) if attachment_file else None
+		attachment_path = handle_file_upload(attachment_file, 'organisations') if attachment_file else None
 
 		data = {
 			"title": request.data.get("title", None),
@@ -90,15 +100,6 @@ def create_organisation(request):
 			"attachment": attachment_path
 		}
 
-		# Convert string booleans to Python booleans for BooleanFields
-		def parse_bool(val):
-			if isinstance(val, bool) or val is None:
-				return val
-			if isinstance(val, str):
-				if val.lower() in ("true", "1", "yes"): return True
-				if val.lower() in ("false", "0", "no"): return False
-			return None
-
 		for bool_field in ["disability", "policies", "risk"]:
 			data[bool_field] = parse_bool(data.get(bool_field))
 
@@ -119,7 +120,7 @@ def create_organisation(request):
 			org = Organisations.objects.create(**{k: v for k, v in data.items() if v is not None})
 			return Response({"message": "Organisation created", "id": org.id}, status=201)
 	except Exception as e:
-		print(e)
+		# print(e)
 		return Response({"error": str(e)}, status=400)
 
 @api_view(['GET'])

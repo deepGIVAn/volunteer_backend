@@ -1,5 +1,5 @@
 from django.urls import path
-from volunteer_app.views import auth_view, base_view, organisation_view
+from volunteer_app.views import auth_view, base_view, organisation_view, role_view, volunteer_view
 
 app_name = "volunteer_app"
 
@@ -15,4 +15,10 @@ urlpatterns = [
 	path('admin/get-organisation/<str:id>/', organisation_view.get_organisation, name="get_organisation"),
 	path('admin/delete-organisation/<str:id>/', organisation_view.delete_organisation, name="delete_organisation"),
 	path('admin/update-organisation/<str:id>/', organisation_view.update_organisation, name="update_organisation"),
+	
+	path('admin/create-role/', role_view.create_role, name="create_role"),
+	path('admin/get-all-roles/', role_view.get_all_roles, name="get_all_roles"),
+	path('admin/get-role/<str:id>/', role_view.get_role, name="get_role"),
+	path('admin/delete-role/<str:id>/', role_view.delete_role, name="delete_role"),
+	path('admin/update-role/<str:id>/', role_view.update_role, name="update_role"),
 ]

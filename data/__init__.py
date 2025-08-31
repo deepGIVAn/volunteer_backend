@@ -345,8 +345,9 @@ def get_days_list():
             for row in csv_reader:
                 days_list.append({
                     'seq': int(row['seq']),
-                    'day': row['day']
+                    'day': row['day_name']
                 })
         return days_list
     except Exception as e:
+        print(e)
         return []
