@@ -6,7 +6,7 @@ import os
 import re
 from datetime import datetime
 from django.conf import settings
-from .organisation_view import parse_datetime, handle_file_upload, parse_bool
+from .organisation_view import parse_datetime, handle_file_upload, parse_bool, add_comment
 from volunteer_app.model import Role
 import random
 from volunteer_app.serializers import RoleSerializer
@@ -82,6 +82,7 @@ def create_role(request):
 			data[bool_field] = parse_bool(data.get(bool_field))
 		
 		role = Role.objects.create(**{k: v for k, v in data.items() if v is not None})
+		add_comment(3, role.id, request.data.get("comment", None), request.admin) # 3 for Role
 		return Response({"message": "Role created successfully", "id": role.id}, status=201)
 	except Exception as e:
 		# print(e)
@@ -90,9 +91,12 @@ def create_role(request):
 @api_view(['GET'])
 @admin_token_required
 def get_all_roles(request):
-	roles = Role.objects.all()
-	serializer = RoleSerializer(roles, many=True)
-	return Response(serializer.data)
+	try:
+		roles = Role.objects.all()
+		serializer = RoleSerializer(roles, many=True)
+		return Response(serializer.data)
+	except Exception as e:
+		return Response([], status=400)
 
 @api_view(['GET'])
 @admin_token_required
@@ -103,6 +107,8 @@ def get_role(request, id):
 		return Response(serializer.data, status=200)
 	except Role.DoesNotExist:
 		return Response({"error": "Role not found"}, status=404)
+	except Exception as e:
+		return Response({"error": str(e)}, status=400)
 
 @api_view(['DELETE'])
 @admin_token_required
@@ -188,6 +194,7 @@ def update_role(request, id):
 				if value is not None:
 					setattr(role, key, value)
 			role.save()
+			add_comment(3, role.id, request.data.get("comment", None), request.admin) # 3 for Role
 			return Response({"message": "Role updated", "id": role.id}, status=200)
 		except Role.DoesNotExist:
 			return Response({"error": "Role not found"}, status=404)

@@ -349,5 +349,5 @@ def get_days_list():
                 })
         return days_list
     except Exception as e:
-        print(e)
+        # print(e)
         return []

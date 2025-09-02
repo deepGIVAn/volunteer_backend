@@ -39,3 +39,9 @@ ROLE_STATUS = (
 	(2, "DeActivated"),
 	(3, "On-Hold")
 )
+
+COMMENT_CATEGORY = (
+	(1, "Organisation"),
+	(2, "Volunteer"),
+	(3, "Role"),
+)

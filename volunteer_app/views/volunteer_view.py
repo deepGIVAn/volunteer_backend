@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from django.conf import settings
 from volunteer_app.model import Volunteer
-from .organisation_view import parse_datetime
+from .organisation_view import parse_datetime, add_comment
 from volunteer_app.serializers import VolunteerSerializer
 
 @api_view(['POST'])
@@ -62,6 +62,7 @@ def create_volunteer(request):
 		}
 		
 		volunteer = Volunteer.objects.create(**{k: v for k, v in data.items() if v is not None})
+		add_comment(2, volunteer.id, request.data.get("comment", None), request.admin) # 2 for Volunteer
 		return Response({"message": "Volunteer created successfully", "id": volunteer.id}, status=201)
 	except Exception as e:
 		return Response({"error": str(e)}, status=400)
@@ -69,9 +70,12 @@ def create_volunteer(request):
 @api_view(['GET'])
 @admin_token_required
 def get_all_volunteers(request):
-	volunteers = Volunteer.objects.all()
-	serializer = VolunteerSerializer(volunteers, many=True)
-	return Response(serializer.data)
+	try:
+		volunteers = Volunteer.objects.all()
+		serializer = VolunteerSerializer(volunteers, many=True)
+		return Response(serializer.data)
+	except Exception as e:
+		return Response([], status=400)
 
 @api_view(['GET'])
 @admin_token_required
@@ -82,6 +86,8 @@ def get_volunteer(request, id):
 		return Response(serializer.data, status=200)
 	except Volunteer.DoesNotExist:
 		return Response({"error": "Volunteer not found"}, status=404)
+	except Exception as e:
+		return Response({"error": str(e)}, status=400)
 
 @api_view(['DELETE'])
 @admin_token_required
@@ -151,6 +157,7 @@ def update_volunteer(request, id):
 				if value is not None:
 					setattr(volunteer, key, value)
 			volunteer.save()
+			add_comment(2, volunteer.id, request.data.get("comment", None), request.admin) # 2 for Volunteer
 			return Response({"message": "Volunteer updated", "id": volunteer.id}, status=200)
 		except Volunteer.DoesNotExist:
 			return Response({"error": "Volunteer not found"}, status=404)

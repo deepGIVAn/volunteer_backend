@@ -1,4 +1,4 @@
-from volunteer_app.model import Organisations
+from volunteer_app.model import Organisations, Comments
 from volunteer_app.decorators import admin_token_required
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
@@ -63,6 +63,13 @@ def parse_bool(val):
 		if val.lower() in ("false", "0", "no"): return False
 	return None
 
+def add_comment(category, parent_id, comment, admin):
+	Comments.objects.get_or_create(
+		admin=admin,
+		category=category,
+		parent_id=parent_id,
+		comment=comment
+	)
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
@@ -116,12 +123,14 @@ def create_organisation(request):
 					if value is not None:
 						setattr(org, key, value)
 				org.save()
+				add_comment(1, org.id, request.data.get("comment", None), request.admin) # 1 for Organisation
 				return Response({"message": "Organisation updated", "id": org.id}, status=200)
 			except Organisations.DoesNotExist:
 				return Response({"error": "Organisation not found"}, status=404)
 		else:
 			# Create new
 			org = Organisations.objects.create(**{k: v for k, v in data.items() if v is not None})
+			add_comment(1, org.id, request.data.get("comment", None), request.admin) # 1 for Organisation
 			return Response({"message": "Organisation created", "id": org.id}, status=201)
 	except Exception as e:
 		# print(e)
@@ -130,10 +139,15 @@ def create_organisation(request):
 @api_view(['GET'])
 @admin_token_required
 def get_all_organisations(request):
-	# Logic to retrieve all organisations
-	organisations = Organisations.objects.all()
-	serializer = OrganisationSerializer(organisations, many=True)
-	return Response(serializer.data, status=200)
+	try:
+		# throw a custom error
+		# raise ValueError("Custom error occurred")
+		# Logic to retrieve all organisations
+		organisations = Organisations.objects.all()
+		serializer = OrganisationSerializer(organisations, many=True)
+		return Response(serializer.data, status=200)
+	except Exception as e:
+		return Response([], status=400)
 
 @api_view(['GET'])
 @admin_token_required
@@ -144,6 +158,8 @@ def get_organisation(request, id):
 		return Response(serializer.data, status=200)
 	except Organisations.DoesNotExist:
 		return Response({"error": "Organisation not found"}, status=404)
+	except Exception as e:
+		return Response({"error": str(e)}, status=400)
 
 @api_view(['DELETE'])
 @admin_token_required
@@ -237,6 +253,7 @@ def update_organisation(request, id):
 					if value is not None:
 						setattr(org, key, value)
 				org.save()
+				add_comment(1, org.id, request.data.get("comment", None), request.admin) # 1 for Organisation
 				return Response({"message": "Organisation updated", "id": org.id}, status=200)
 			except Organisations.DoesNotExist:
 				return Response({"error": "Organisation not found"}, status=404)
