@@ -27,4 +27,9 @@ urlpatterns = [
 	path('admin/get-volunteer/<str:id>/', volunteer_view.get_volunteer, name="get_volunteer"),
 	path('admin/delete-volunteer/<str:id>/', volunteer_view.delete_volunteer, name="delete_volunteer"),
 	path('admin/update-volunteer/<str:id>/', volunteer_view.update_volunteer, name="update_volunteer"),
+
+	path('admin/create-staff/', auth_view.create_staff, name="create_staff"),
+	path('admin/get-all-staff/', auth_view.get_all_staff, name="get_all_staff"),
+	path('admin/delete-staff/<str:id>/', auth_view.delete_staff, name="delete_staff"),
+	path('admin/update-staff/<str:id>/', auth_view.update_staff, name="update_staff"),
 ]

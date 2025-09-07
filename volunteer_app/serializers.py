@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from volunteer_app.model import Organisations, Role, Volunteer, Comments
+from volunteer_app.model import Organisations, Role, Volunteer, Comments, Admin
 from django.conf import settings
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -81,3 +81,14 @@ class VolunteerSerializer(serializers.ModelSerializer):
 	def get_comments(self, obj):
 		comments = Comments.objects.filter(category=2, parent_id=obj.id).exclude(comment=None).exclude(comment='').order_by('-created_at')
 		return CommentSerializer(comments, many=True).data
+
+
+class AdminSerializer(serializers.ModelSerializer):
+	password = serializers.SerializerMethodField()
+	
+	def get_password(self, obj):
+		return None
+	
+	class Meta:
+		model = Admin
+		fields = ('id', 'name', 'email', 'role', 'status', 'created_at', 'password')

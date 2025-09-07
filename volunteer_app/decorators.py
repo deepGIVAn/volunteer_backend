@@ -15,3 +15,12 @@ def admin_token_required(view_func):
 		except AdminToken.DoesNotExist:
 			return JsonResponse({'error': 'Invalid token'}, status=401)
 	return _wrapped_view
+
+def super_admin_required(view_func):
+	@wraps(view_func)
+	def _wrapped_view(request, *args, **kwargs):
+		if hasattr(request, 'admin'):
+			if request.admin.role != 1:
+				return JsonResponse({'error': 'Privileges required'}, status=403)
+		return view_func(request, *args, **kwargs)
+	return _wrapped_view
